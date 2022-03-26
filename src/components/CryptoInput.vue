@@ -6,7 +6,7 @@
 	      <img :src="`/img/${currency}-mini.png`">
 	      {{ currency.toUpperCase() }}
 	    </div>
-	    <input type="number" :value="value" onclick="this.select()" />
+	    <input type="number" :disabled="disabled" :value="value" onclick="this.select()" />
 	    <a v-if="setMax" class="btn-max" href="#" @click="setMax">Max</a>
 	    <div class="clear"></div>
 	  </div>
@@ -14,7 +14,7 @@
 </template>
 <script type="text/javascript">
 export default {
-	props: ['currency', 'label', 'setMax', 'value'],
+	props: ['currency', 'label', 'setMax', 'value', 'disabled'],
 	data() {
 		return {
 

@@ -26,10 +26,7 @@
 import './assets/reset.css';
 import './assets/grid.css';
 import helper from "./helper";
-import { mapMutations, mapGetters } from 'vuex';
-import Web3 from "web3";
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import { mapGetters } from 'vuex';
 
 export default {
   components: {  },
@@ -45,59 +42,6 @@ export default {
     ...mapGetters(['accounts']),
     isRightNetwork() {
       return this.usdc && this.usdc.address;
-    }
-  },
-  methods: {
-    ...mapMutations(['setChainId', 'setAccounts']),
-    async connectWallet() {
-      const providerOptions = {
-        walletconnect: {
-          package: WalletConnectProvider, // required
-          options: {
-            infuraId: "1a466cc6a1314f818035d806ffbf7f71" // required
-          }
-        }
-      };
-      this.web3Modal = new Web3Modal({
-        // network: "mainnet", // optional
-        cacheProvider: true, // optional
-        providerOptions // required
-      });
-      let provider;
-      try {
-        provider = await this.web3Modal.connect();
-      } catch(e) {
-        console.log("Could not get a wallet connection", e);
-        return;
-      }
-      window.web3 = new Web3(provider);
-      this.networkId = await this.getCurrentNetwork();
-      this.setChainId(this.networkId);
-      return this.getAccounts().then(async accounts => {
-        await this.connectContract();
-        this.setAccounts( accounts )
-        ethereum.on("chainChanged", () => {
-          window.location.reload();
-        });
-        return true;
-      })
-    },
-    async disconnectWallet() {
-      await this.web3Modal.clearCachedProvider();
-      window.location.reload();
-    },
-    async getAccounts() {
-      if ( window.ethereum )
-        return window.ethereum.request({ method: 'eth_accounts' })
-      return [];
-    },
-    detectEthereum() {
-      const { ethereum } = window;
-      if (ethereum && ethereum.isMetaMask) {
-        console.log('Ethereum successfully detected!');
-      } else {
-        console.log('Please install MetaMask!');
-      }
     }
   },
   mounted() {

@@ -6,7 +6,7 @@
           Biểu đồ giá theo thời gian
         </h3>
       </box>
-      <div class="col-sm-12 col-md-4" v-if="isConnected">
+      <div class="col-sm-12 col-md-4">
         <swap />
         <box>
           <ul class="list-note">

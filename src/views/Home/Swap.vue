@@ -4,23 +4,34 @@
         Trao đổi
         <a href="#" class="setting"><img src="../../assets/setting.png"></a>
       </h3>
-      <crypto-input :currency="coins[0]" :value="values[0]" :key="`0-${values[0]}`" label="Từ" :set-max="setMax" />
-      <div style="text-align: center;"><a class="btn-switch" href="#" @click="switchCoin"><img src="../../assets/arrow-down.png"></a></div>
-      <crypto-input :currency="coins[1]" :value="values[1]" :key="`1-${values[1]}`" label="Sang" />
+      <crypto-input :currency="coins[0]" :value="values[0]" 
+      	:key="`0-${values[0]}`" label="Từ" :set-max="isConnected ? setMax : null"
+      	:disabled="!isConnected" />
+      <div style="text-align: center;">
+      	<a class="btn-switch" href="#" @click="switchCoin">
+      		<div style="width: 20px; height: 20px; text-align: center; line-height: 20px;">
+	      		<loading v-if="loading" />
+	      		<img v-else src="../../assets/arrow-down.png">
+	      	</div>
+      	</a>
+      </div>
+      <crypto-input :currency="coins[1]" :value="values[1]" :key="`1-${values[1]}`" label="Sang" :disabled="!isConnected || loading" />
       <div class="note">Giá trị nhận được chỉ mang tính chất tương đối do biến động tại thời điểm lệnh được thực thi.</div>
-      <button class="button" @click="swap">Xác nhận</button>
+      <button v-if="isConnected" class="button" @click="swap">Xác nhận</button>
+      <button v-else class="button" @click="connectWallet">Liên kết ví</button>
     </box>
 </template>
 <script type="text/javascript">
 import { mapMutations, mapGetters } from 'vuex';
 import CryptoInput from '../../components/CryptoInput';
 import Box from '../../components/Box';
+import Loading from '../../components/Loading';
 import helper from "../../helper";
 import pool from "../../helper/pool";
 
 export default {
 	components: {
-	    Box, CryptoInput
+	    Box, CryptoInput, Loading
 	},
 	data() {
 		return {
@@ -37,7 +48,8 @@ export default {
 			async handler(value) {
 				// calculate swap token
 				// price slippage
-				this.calculate()
+				if ( !this.loading )
+					this.calculate()
 			}
 		}
 	},
@@ -46,8 +58,9 @@ export default {
 			this.loading = true;
 			let value = await this[this.coins[0].toUpperCase()].methods.balanceOf(this.accounts[0]).call();
 			value /= 10**(this[this.coins[0].toUpperCase()].decimals);
-			this.loading = false;
 			this.$set(this.values, 0, value);
+			this.loading = false;
+			this.doCalculate();
 		},
 		switchCoin() {
 			this.coins.reverse()
@@ -127,7 +140,7 @@ export default {
 	        }).finally(e => {
 	        	this.loading = false;
 	        });
-	    },
+	    }
 	},
 	mounted() {
 
@@ -158,6 +171,7 @@ export default {
 }
 .btn-switch img {
   width: 16px;
+  padding: 0 2px;
 }
 .note {
   margin-top:  30px;
