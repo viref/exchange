@@ -4,11 +4,9 @@
       <div class="container">
         <a href="https://viref.net" class="logo"><img src="./assets/viref-logo.png" /></a>
         <ul class="menu">
-          <li><a href="" class="active">Trang chủ</a></li>
-          <li><a href="">Blogs</a></li>
-          <li><a href="">Liên hệ</a></li>
-          <li><a href="">Về chúng tôi</a></li>
-          <li><a href="">Whitepaper</a></li>
+          <li><a href="https://viref.net" class="active">Trang chủ</a></li>
+          <li><a href="https://blog.viref.net">Blogs</a></li>
+          <li><a href="https://whitepaper.viref.net">Whitepaper</a></li>
         </ul>
         <div class="right-item">
           <a class="outline-button" href="#" @click="connectWallet">
