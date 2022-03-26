@@ -11,7 +11,8 @@
           <li><a href="">Whitepaper</a></li>
         </ul>
         <div class="right-item">
-          <a class="outline-button" href="#">
+          <a class="outline-button" href="#" @click="connectWallet">
+            <img src="./assets/wallet.png" />
             {{ accounts[0] || "Liên kết ví" }}
           </a>
         </div>
@@ -162,6 +163,7 @@ a {
 
 .logo {
   float: left;
+  padding: 4px 0;
 }
 .logo img {
   width: 120px;
@@ -172,10 +174,12 @@ a {
 }
 .menu li {
   float: left;
-  padding: 10px 20px;
+  padding: 0px 10px;
 }
 .menu a {
   opacity: 0.7;
+  line-height: 42px;
+  padding: 10px;
 }
 .menu a:hover {
   opacity: 1;
@@ -199,6 +203,12 @@ a {
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
+  line-height: 24px;
+}
+.outline-button img {
+  width: 24px;
+  float: left;
+  margin-right: 8px;
 }
 .box h3 {
   font-size: 20px;
