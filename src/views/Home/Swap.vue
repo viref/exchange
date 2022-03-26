@@ -55,7 +55,8 @@ export default {
 		},
 		swap() {
 			let value1 = (BigInt(this.values[1])*BigInt(10**18)).toString();
-			this.$emit(this.coins[0]=='vref'?"sell":"buy", [this.values[0], value1])
+			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], value1);
+			else return this.buyToken(this.values[0], value1);
 		},
 		calculate() {
 			if ( this.timer ) {
@@ -83,7 +84,50 @@ export default {
 
 			this.loading = false;
 			return this.$set(this.values, 1, delta);
-		}
+		},
+		async buyToken(amount, expected=0) {
+			if ( !amount ) return;
+			this.loading = true;
+			let from = this.accounts[0];
+			amount = BigInt(parseFloat(amount) * 10**this.USDC.decimals).toString();
+			let approved = await this.USDC.methods.allowance(from, this.vref.address).call({ from });
+			if ( !approved || parseFloat(approved)<amount ) {
+				let approve = await this.USDC.methods.approve(this.vref.address, amount).send({ from });
+				if ( !approve || !approve.status ) {
+					this.loading = false;
+					this.error = "Contract cannot access your money";
+					return false;
+				}
+			}
+	        this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
+	        	let status = result.status;
+	        	if ( status ) window.location.reload();
+	        }).finally(e => {
+	        	this.loading = false;
+	        });
+	    },
+		async sellToken(amount, expected=0) {
+			let from = this.accounts[0];
+			if ( !amount ) return;
+			this.loading = true;
+			amount = BigInt(parseFloat(amount) * 10**this.VREF.decimals).toString();
+			let approved = await this.VREF.methods.allowance(from, this.vref.address).call({ from });
+			if ( !approved || parseFloat(approved)<amount ) {
+				let approve = await this.VREF.methods.approve(this.vref.address, amount).send({ from });
+				if ( !approve || !approve.status ) {
+					this.loading = false;
+					this.error = "Contract cannot access your money";
+					return false;
+				}
+			}
+
+	        this.VREF.methods.sellToken(amount, expected || 0).send({ from }).then(result => {
+	        	let status = result.status;
+	        	if ( status ) window.location.reload();
+	        }).finally(e => {
+	        	this.loading = false;
+	        });
+	    },
 	},
 	mounted() {
 
