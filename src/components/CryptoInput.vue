@@ -6,7 +6,7 @@
 	      <img :src="`/img/${currency}-mini.png`">
 	      {{ currency.toUpperCase() }}
 	    </div>
-	    <input type="number" :disabled="disabled" :value="value" onclick="this.select()" />
+	    <input type="number" :disabled="disabled" :value="value" onclick="this.select()" v-on:input="updateValue($event.target.value)" />
 	    <a v-if="setMax" class="btn-max" href="#" @click="setMax">Max</a>
 	    <div class="clear"></div>
 	  </div>
@@ -21,7 +21,9 @@ export default {
 		}
 	},
 	methods: {
-
+		updateValue(value) {
+			this.$emit('input', value)
+		}
 	},
 	mounted() {
 

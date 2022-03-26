@@ -4,8 +4,8 @@
         Trao đổi
         <a href="#" class="setting"><img src="../../assets/setting.png"></a>
       </h3>
-      <crypto-input :currency="coins[0]" :value="values[0]" 
-      	:key="`0-${values[0]}`" label="Từ" :set-max="isConnected ? setMax : null"
+      <crypto-input :currency="coins[0]" v-model="values[0]"
+      	label="Từ" :set-max="isConnected ? setMax : null"
       	:disabled="!isConnected" />
       <div style="text-align: center;">
       	<a class="btn-switch" href="#" @click="switchCoin">
@@ -15,7 +15,7 @@
 	      	</div>
       	</a>
       </div>
-      <crypto-input :currency="coins[1]" :value="values[1]" :key="`1-${values[1]}`" label="Sang" :disabled="!isConnected || loading" />
+      <crypto-input :currency="coins[1]" :value="values[1]" label="Sang" :disabled="!isConnected || loading" />
       <div class="note">Giá trị nhận được chỉ mang tính chất tương đối do biến động tại thời điểm lệnh được thực thi.</div>
       <button v-if="isConnected" class="button" @click="swap">Xác nhận</button>
       <button v-else class="button" @click="connectWallet">Liên kết ví</button>
@@ -37,7 +37,8 @@ export default {
 		return {
 			coins: ["vref", "usdc"],
 			values: [0, 0],
-			loading: false
+			loading: false,
+			timer: null
 		}
 	},
 	computed: {
@@ -46,8 +47,6 @@ export default {
 	watch: {
 		'values.0': {
 			async handler(value) {
-				// calculate swap token
-				// price slippage
 				if ( !this.loading )
 					this.calculate()
 			}
