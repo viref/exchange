@@ -11,22 +11,113 @@
           <li><a href="">Whitepaper</a></li>
         </ul>
         <div class="right-item">
-          <a class="button" href="#">
-            Liên kết ví
+          <a class="outline-button" href="#">
+            {{ accounts[0] || "Liên kết ví" }}
           </a>
         </div>
       </div>
       <div class="clear"></div>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 <script>
 import './assets/reset.css';
 import './assets/grid.css';
+import helper from "./helper";
+import { mapMutations, mapGetters } from 'vuex';
+import Web3 from "web3";
+import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 export default {
+  components: {  },
+  data() {
+    return {
+      loading: true,
+      tab: 'contract',
+      web3Modal: null,
+      networkId: null
+    }
+  },
+  computed: {
+    ...mapGetters(['accounts']),
+    isRightNetwork() {
+      return this.usdc && this.usdc.address;
+    }
+  },
+  methods: {
+    ...mapMutations(['setChainId', 'setAccounts']),
+    async connectWallet() {
+      const providerOptions = {
+        walletconnect: {
+          package: WalletConnectProvider, // required
+          options: {
+            infuraId: "1a466cc6a1314f818035d806ffbf7f71" // required
+          }
+        }
+      };
+      this.web3Modal = new Web3Modal({
+        // network: "mainnet", // optional
+        cacheProvider: true, // optional
+        providerOptions // required
+      });
+      let provider;
+      try {
+        provider = await this.web3Modal.connect();
+      } catch(e) {
+        console.log("Could not get a wallet connection", e);
+        return;
+      }
+      window.web3 = new Web3(provider);
+      this.networkId = await this.getCurrentNetwork();
+      this.setChainId(this.networkId);
+      return this.getAccounts().then(async accounts => {
+        await this.connectContract();
+        this.setAccounts( accounts )
+        ethereum.on("chainChanged", () => {
+          window.location.reload();
+        });
+        return true;
+      })
+    },
+    async disconnectWallet() {
+      await this.web3Modal.clearCachedProvider();
+      window.location.reload();
+    },
+    async getAccounts() {
+      if ( window.ethereum )
+        return window.ethereum.request({ method: 'eth_accounts' })
+      return [];
+    },
+    detectEthereum() {
+      const { ethereum } = window;
+      if (ethereum && ethereum.isMetaMask) {
+        console.log('Ethereum successfully detected!');
+      } else {
+        console.log('Please install MetaMask!');
+      }
+    }
+  },
+  mounted() {
+    if ( window.ethereum ) {
+      this.getAccounts().then(accounts => {
+        if ( accounts.length ) 
+          return this.connectWallet();
+      }).catch(e => console.log(e)).finally(e => {
+        this.loading = false;
+      })
+    } else {
+      window.addEventListener('ethereum#initialized', this.detectEthereum, {
+        once: true,
+      });
 
+      // If the event is not dispatched by the end of the timeout,
+      // the user probably doesn't have MetaMask installed.
+      setTimeout(this.detectEthereum, 3000); // 3 seconds
+    }
+  },
+  mixins: [helper]
 }
 </script>
 <style>
@@ -97,12 +188,21 @@ a {
   float: right;
 }
 
-.button {
+.outline-button {
   display: block;
   border: 1px solid #FFFFFF;
   box-sizing: border-box;
   border-radius: 8px;
   padding: 8px 24px;
   font-weight: 700;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+.box h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 </style>
