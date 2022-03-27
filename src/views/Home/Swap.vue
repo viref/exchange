@@ -50,6 +50,11 @@ export default {
 				if ( !this.loading )
 					this.calculate()
 			}
+		},
+		'values.1': {
+			async handler(value) {
+				this.$emit("update", [value, this.coins[0]]);
+			}
 		}
 	},
 	methods: {

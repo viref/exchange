@@ -7,20 +7,20 @@
         </h3>
       </box>
       <div class="col-sm-12 col-md-4">
-        <swap />
+        <swap @update="updateReceivedAmount" />
         <box>
-          <ul class="list-note">
+          <ul v-if="received" class="list-note">
             <li>Tối thiểu nhận được</li>
             <li><img src="../../assets/faq.png" class="faq" /></li>
-            <li>0.025 USDC</li>
+            <li>{{ slippageReceived }} {{ currency.toUpperCase() }}</li>
           </ul>
           <ul class="list-note">
-            <li>Chênh lệch giá</li>
-            <li style="color: #53A548">+ 0.2%</li>
+            <li>Trượt giá tối đa</li>
+            <li style="color: #53A548">+ {{ slippage }}%</li>
           </ul>
           <ul class="list-note">
             <li>Phí thanh khoản</li>
-            <li>0.025 USDC</li>
+            <li>{{ exchangeFee }} {{ currency.toUpperCase() }}</li>
           </ul>
           <div class="clear"></div>
         </box>
@@ -39,12 +39,29 @@ export default {
     Box,
     Swap
   },
+  data() {
+    return {
+      received: 0,
+      slippage: 0.2,
+      currency: ''
+    }
+  },
   computed: {
-    ...mapGetters(['isConnected'])
+    ...mapGetters(['isConnected']),
+    slippageReceived() {
+      return this.received * (1-this.slippage/100)
+    },
+    exchangeFee() {
+      return this.currency=='vref'?1:0.1;
+    }
   },
   methods: {
     setMax() {
       console.log("hello")
+    },
+    updateReceivedAmount(amount) {
+      this.received = amount[0];
+      this.currency = amount[1];
     }
   }
 }

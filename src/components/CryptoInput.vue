@@ -6,7 +6,8 @@
 	      <img :src="`/img/${currency}-mini.png`">
 	      {{ currency.toUpperCase() }}
 	    </div>
-	    <input type="number" :disabled="disabled" :value="value" onclick="this.select()" v-on:input="updateValue($event.target.value)" />
+	    <input type="text" :disabled="disabled" :value="formatedValue" onclick="this.select()" 
+	    	v-on:input="updateValue($event.target.value)" />
 	    <a v-if="setMax" class="btn-max" href="#" @click="setMax">Max</a>
 	    <div class="clear"></div>
 	  </div>
@@ -20,9 +21,15 @@ export default {
 
 		}
 	},
+	computed: {
+		formatedValue() {
+    		return parseFloat(this.value).toLocaleString();
+		}
+	},
 	methods: {
 		updateValue(value) {
-			this.$emit('input', value)
+			let n = parseFloat(value.replace(/\,/g,''));
+			this.$emit('input', n)
 		}
 	},
 	mounted() {
@@ -57,7 +64,7 @@ export default {
   margin-right: 10px;
 }
 .currency img {
-  width: 24px;
+  height: 24px;
   float: left;
   margin-right: 8px;
 }

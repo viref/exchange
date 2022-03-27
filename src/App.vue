@@ -139,7 +139,7 @@ a {
   border: 1px solid #FFFFFF;
   box-sizing: border-box;
   border-radius: 8px;
-  padding: 8px 24px;
+  padding: 8px 16px;
   font-weight: 700;
   max-width: 180px;
   white-space: nowrap;
