@@ -52,7 +52,7 @@ export default {
   computed: {
     ...mapGetters(['isConnected']),
     slippageReceived() {
-      return this.received * (1-this.slippage/100)
+      return parseInt((this.received * (1-this.slippage/100))*100)/100
     },
     exchangeFee() {
       return this.currency=='vref'?1:0.1;
