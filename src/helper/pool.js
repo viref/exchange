@@ -19,21 +19,21 @@ export default {
         let buyNowCost;
         let buyNowToken;
 
-        amount = BigInt(amount * 10**18); // USDC uses 6 decimal places of precision, convert to 18
-        let tokenMint = BigInt(0);
-        let tokenTransferForUser = BigInt(0);
+        amount = amount; // USDC uses 6 decimal places of precision, convert to 18
+        let tokenMint = 0;
+        let tokenTransferForUser = 0;
         let currentMoney = _moneyInPool;
         let moneyLeft = amount;
 
         while (moneyLeft > 0) {
             if (state == this.statusEnum.ICO) {
-                nextBreak = (BigInt(this.tokenBeforeICO[currentStep]) + BigInt(5 * 10**5 * 10 **18)) - _tokenInPool;
-                assumingToken = moneyLeft * BigInt(100)/BigInt(this.icoPrice[currentStep]);
+                nextBreak = (this.tokenBeforeICO[currentStep] + 5 * 10**5) - _tokenInPool;
+                assumingToken = moneyLeft * 100/this.icoPrice[currentStep];
             } else {
                 if (currentStep==29 && state==this.statusEnum.IDO) { // nomore ICO
                     nextBreak = 2**256 - 1; // MAX_INT
                 } else {
-                    nextBreak = state == this.statusEnum.subIDO ? subIDOSold : (_tokenInPool - BigInt(this.tokenBeforeICO[currentStep + 1]));
+                    nextBreak = state == this.statusEnum.subIDO ? subIDOSold : (_tokenInPool - this.tokenBeforeICO[currentStep + 1]);
                 }
                 assumingToken = _tokenInPool - (_tokenInPool * _moneyInPool / (_moneyInPool + moneyLeft));
             }
@@ -43,7 +43,7 @@ export default {
 
             if (assumingToken>nextBreak) {
                 buyNowCost = state == this.statusEnum.ICO ?
-                                    buyNowToken * BigInt(this.icoPrice[currentStep])/BigInt(100) :
+                                    buyNowToken * this.icoPrice[currentStep]/100 :
                                     ((_tokenInPool * _moneyInPool)/(_tokenInPool - buyNowToken) - _moneyInPool);
             }
             _moneyInPool += buyNowCost;
@@ -72,11 +72,11 @@ export default {
             moneyLeft = moneyLeft - buyNowCost;
         }
 
-        return ((tokenMint+tokenTransferForUser)/BigInt(10**18)).toString()
+        return (tokenMint+tokenTransferForUser)
 	},
 
 	sell(_tokenInPool, _moneyInPool, amount) {
-		let receivedMoney = _moneyInPool - _moneyInPool*_tokenInPool/(_tokenInPool+BigInt(amount*10**18));
-		return (receivedMoney/BigInt(10**18)).toString()
+		let receivedMoney = _moneyInPool - _moneyInPool*_tokenInPool/(_tokenInPool+amount);
+		return receivedMoney
 	}
 }

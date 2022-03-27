@@ -71,7 +71,7 @@ export default {
 			this.values = [0, 0]
 		},
 		swap() {
-			let expected = (BigInt(this.values[1])*BigInt(10**18)).toString();
+			let expected = (BigInt(this.values[1])*BigInt(10**this.VREF.decimals)).toString();
 			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], expected).finally(e => this.loading = false);
 			else return this.buyToken(this.values[0], expected).finally(e => this.loading = false);
 		},
@@ -85,8 +85,8 @@ export default {
 			if ( this.loading ) return false;
 			if ( !this.values[0] ) return this.values = [0, 0];
 			this.loading = true;
-			let _moneyInPool = BigInt(await this.VREF.methods._moneyInPool().call());
-			let _tokenInPool = BigInt(await this.VREF.methods._tokenInPool().call());
+			let _moneyInPool = (await this.VREF.methods._moneyInPool().call())/10**this.VREF.decimals;
+			let _tokenInPool = (await this.VREF.methods._tokenInPool().call())/10**this.VREF.decimals;
 			let delta;
 			let method = 'buyToken';
 			if ( this.coins[0]=='vref' ) { // vref to usd
@@ -95,7 +95,7 @@ export default {
 			} else {
   				let currentStep = parseInt(await this.VREF.methods.currentStep().call());
   				let state = parseInt(await this.VREF.methods.state().call());
-  				let subIDOSold = BigInt(await this.VREF.methods.subIDOSold().call());
+  				let subIDOSold = await this.VREF.methods.subIDOSold().call()/10**this.VREF.decimals;
 				delta = pool.buy(_tokenInPool, _moneyInPool, currentStep, state, subIDOSold, this.values[0]);
 			}
 

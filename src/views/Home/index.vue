@@ -5,6 +5,7 @@
         <h3>
           Biểu đồ giá theo thời gian
         </h3>
+        <chart />
       </box>
       <div class="col-sm-12 col-md-4">
         <swap @update="updateReceivedAmount" />
@@ -33,11 +34,13 @@
 import { mapMutations, mapGetters } from 'vuex';
 import Box from '../../components/Box';
 import Swap from './Swap';
+import Chart from './Chart';
 export default {
   name: 'Home',
   components: {
     Box,
-    Swap
+    Swap,
+    Chart
   },
   data() {
     return {
