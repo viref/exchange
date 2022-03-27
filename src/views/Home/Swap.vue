@@ -17,7 +17,7 @@
       </div>
       <crypto-input :currency="coins[1]" :value="values[1]" label="Sang" :disabled="!isConnected || loading" />
       <div class="note">Giá trị nhận được chỉ mang tính chất tương đối do biến động tại thời điểm lệnh được thực thi.</div>
-      <button v-if="isConnected" class="button" @click="swap">Xác nhận</button>
+      <button v-if="isConnected" class="button" @click="swap" :disabled="loading">{{ loading?'Đang xử lý':'Chuyển đổi' }}</button>
       <button v-else class="button" @click="connectWallet">Liên kết ví</button>
     </box>
 </template>
@@ -71,9 +71,9 @@ export default {
 			this.values = [0, 0]
 		},
 		swap() {
-			let value1 = (BigInt(this.values[1])*BigInt(10**18)).toString();
-			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], value1);
-			else return this.buyToken(this.values[0], value1);
+			let expected = (BigInt(this.values[1])*BigInt(10**18)).toString();
+			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], expected).finally(e => this.loading = false);
+			else return this.buyToken(this.values[0], expected).finally(e => this.loading = false);
 		},
 		calculate() {
 			if ( this.timer ) {
@@ -197,5 +197,8 @@ export default {
   width: 100%;
   border: 0;
   cursor: pointer;
+}
+.button:disabled {
+	opacity: 0.5;
 }
 </style>
