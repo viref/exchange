@@ -83,7 +83,7 @@ export default {
 		},
 		async doCalculate() {
 			if ( this.loading ) return false;
-			if ( this.values[0]==0 ) return this.$set(this.values, 1, 0);
+			if ( !this.values[0] ) return this.values = [0, 0];
 			this.loading = true;
 			let _moneyInPool = BigInt(await this.VREF.methods._moneyInPool().call());
 			let _tokenInPool = BigInt(await this.VREF.methods._tokenInPool().call());

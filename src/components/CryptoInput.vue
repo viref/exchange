@@ -23,11 +23,13 @@ export default {
 	},
 	computed: {
 		formatedValue() {
-    		return parseFloat(this.value).toLocaleString();
+			let value = this.value || 0;
+    		return parseFloat(value).toLocaleString();
 		}
 	},
 	methods: {
 		updateValue(value) {
+			value = value || "0";
 			let n = parseFloat(value.replace(/\,/g,''));
 			this.$emit('input', n)
 		}
