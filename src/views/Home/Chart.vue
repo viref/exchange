@@ -1,5 +1,11 @@
 <template>
 	<div class="chart-container"><canvas ref="myChart" style="width: 96%;"></canvas>
+		<div style="color: black;">
+			<p>moneyInPool: {{ moneyInPool }}</p>
+			<p>tokenInPool: {{ tokenInPool }}</p>
+			<p>currentStep: {{ currentStep }}</p>
+			<p>totalSupply: {{ totalSupply }}</p>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
