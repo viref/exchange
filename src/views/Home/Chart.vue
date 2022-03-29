@@ -81,7 +81,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['isConnected', 'chainName', 'history'])
+		...mapGetters(['isConnected', 'chainName', 'history', 'chainId'])
 	},
 	watch: {
 		async isConnected(active) {
@@ -95,8 +95,11 @@ export default {
 			this.moneyInPool = Web3.utils.fromWei(_moneyInPool, 'ether');
 			this.tokenInPool = Web3.utils.fromWei(_tokenInPool, 'ether');
 
-			if ( vref.moralis[this.chainName] )
+			if ( vref.moralis[this.chainName] ) {
 				this.getEvents(vref.moralis[this.chainName]);
+				this.getContractEvents(vref.moralis[this.chainName])
+			}
+
 		},
 		history: {
 	      deep: true,
@@ -204,6 +207,17 @@ export default {
 				return true;
 	    	});
 		},
+		async getContractEvents(server, fromDate, toDate, address) {
+			Moralis.start(server)
+			const params = {
+				networkId: this.chainId,
+				fromDate: fromDate || new Date("2022/01/01"),
+				toDate: toDate || new Date(Date.now()),
+				address
+			}
+			const transactions = await Moralis.Cloud.run("getTransactions", params)
+			console.log(transactions)
+		}
 	},
 	async mounted() {
 		Chart.defaults.plugins.legend.display = false;
