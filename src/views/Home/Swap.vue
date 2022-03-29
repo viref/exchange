@@ -8,7 +8,7 @@
       	label="Từ" :set-max="isConnected ? setMax : null"
       	:disabled="!isConnected" />
       <div style="text-align: center;">
-      	<a class="btn-switch" href="#" @click="switchCoin">
+      	<a class="btn-switch" href="#" v-on:click.prevent.stop="switchCoin">
       		<div style="width: 20px; height: 20px; text-align: center; line-height: 20px;">
 	      		<loading v-if="loading" />
 	      		<img v-else src="../../assets/arrow-down.png">
@@ -71,7 +71,7 @@ export default {
 			this.values = [0, 0]
 		},
 		swap() {
-			let expected = BigInt(parseFloat(this.values[1])*10**this.VREF.decimals).toString();
+			let expected = BigInt(parseFloat(this.values[1])*10**this.VREF.decimals*0.995).toString();
 			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], expected).finally(e => this.loading = false);
 			else return this.buyToken(this.values[0], expected).finally(e => this.loading = false);
 		},
@@ -93,9 +93,9 @@ export default {
   				delta = pool.sell(_tokenInPool, _moneyInPool, this.values[0]);
   				method = 'sellToken';
 			} else {
-  				let currentStep = parseInt(await this.VREF.methods.currentStep().call());
-  				let state = parseInt(await this.VREF.methods.state().call());
-  				let subIDOSold = await this.VREF.methods.subIDOSold().call()/10**this.VREF.decimals;
+				let currentStep = parseInt(await this.VREF.methods.currentStep().call());
+				let state = parseInt(await this.VREF.methods.state().call());
+				let subIDOSold = await this.VREF.methods.subIDOSold().call()/10**this.VREF.decimals;
 				delta = pool.buy(_tokenInPool, _moneyInPool, currentStep, state, subIDOSold, this.values[0]);
 			}
 
@@ -116,13 +116,15 @@ export default {
 					return false;
 				}
 			}
-	        this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
-	        	let status = result.status;
-	        	if ( status ) window.location.reload();
-	        }).finally(e => {
-	        	this.loading = false;
-	        });
-	    },
+			console.log({expected})
+			// expected = 0
+      this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
+      	let status = result.status;
+      	if ( status ) window.location.reload();
+      }).finally(e => {
+      	this.loading = false;
+      });
+	  },
 		async sellToken(amount, expected=0) {
 			let from = this.accounts[0];
 			if ( !amount ) return;
@@ -138,13 +140,13 @@ export default {
 				}
 			}
 
-	        this.VREF.methods.sellToken(amount, expected || 0).send({ from }).then(result => {
-	        	let status = result.status;
-	        	if ( status ) window.location.reload();
-	        }).finally(e => {
-	        	this.loading = false;
-	        });
-	    }
+      this.VREF.methods.sellToken(amount, expected || 0).send({ from }).then(result => {
+      	let status = result.status;
+      	if ( status ) window.location.reload();
+      }).finally(e => {
+      	this.loading = false;
+      });
+	  }
 	},
 	mounted() {
 

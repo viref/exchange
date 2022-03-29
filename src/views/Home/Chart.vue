@@ -1,11 +1,11 @@
 <template>
 	<div class="chart-container"><canvas ref="myChart" style="width: 96%;"></canvas>
-		<div style="color: black;">
+		<!-- <div style="color: black;">
 			<p>moneyInPool: {{ moneyInPool }}</p>
 			<p>tokenInPool: {{ tokenInPool }}</p>
 			<p>currentStep: {{ currentStep }}</p>
 			<p>totalSupply: {{ totalSupply }}</p>
-		</div>
+		</div> -->
 	</div>
 </template>
 <script type="text/javascript">
@@ -96,7 +96,7 @@ export default {
 			this.tokenInPool = Web3.utils.fromWei(_tokenInPool, 'ether');
 
 			if ( vref.moralis[this.chainName] ) {
-				this.getEvents(vref.moralis[this.chainName]);
+				// this.getEvents(vref.moralis[this.chainName]);
 				this.getContractEvents(vref.moralis[this.chainName])
 			}
 
@@ -114,7 +114,7 @@ export default {
 	            script: trans.map(tx => ({
 	              name: tx.event,
 	              address: tx.data.address,
-	              amount: parseInt(this.formatCurrency(tx.data.amount, VREF))
+	              amount: parseFloat(tx.data.amount/10**18)
 	            }))
 	          })
 	        }).then(res => res.json()).then(res => {
@@ -208,6 +208,7 @@ export default {
 	    	});
 		},
 		async getContractEvents(server, fromDate, toDate, address) {
+			console.log("Hello")
 			Moralis.start(server)
 			const params = {
 				networkId: this.chainId,
@@ -216,7 +217,16 @@ export default {
 				address
 			}
 			const transactions = await Moralis.Cloud.run("getTransactions", params)
-			console.log(transactions)
+			this.transactions = transactions.map(tx => ({
+				transactionHash: "ccc",
+				event: tx.type,
+				data: {
+					address: "abcdef",
+					amount: tx.amount
+				}
+			}))
+			this.setHistory(this.transactions);
+			console.log(this.transactions)
 		}
 	},
 	async mounted() {

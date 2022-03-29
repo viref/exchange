@@ -18,7 +18,7 @@ function initState() {
       };
   }
   return {
-    chainId: supportedNetworks.id,
+    chainId: 0,
     history: [],
     selectedTx: -1,
     supportedNetworks,
