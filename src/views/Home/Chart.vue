@@ -75,7 +75,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['isConnected', 'chainName', 'history'])
+		...mapGetters(['isConnected', 'chainName', 'history', 'chainId'])
 	},
 	watch: {
 		async isConnected(active) {
@@ -91,8 +91,7 @@ export default {
 
 			if ( vref.moralis[this.chainName] ) {
 				this.getEvents(vref.moralis[this.chainName]);
-				const events = await this.getContractEvents(vref.moralis[this.chainName])
-				console.log(events)
+				this.getContractEvents(vref.moralis[this.chainName])
 			}
 
 		},
@@ -205,30 +204,13 @@ export default {
 		async getContractEvents(server, fromDate, toDate, address) {
 			Moralis.start(server)
 			const params = {
+				networkId: this.chainId,
 				fromDate: fromDate || new Date("2022/01/01"),
 				toDate: toDate || new Date(Date.now()),
 				address
 			}
 			const transactions = await Moralis.Cloud.run("getTransactions", params)
-			let buyTokenPrefix = window.web3.eth.abi.encodeFunctionSignature('buyToken(uint256,uint256)');
-			let sellTokenPrefix = window.web3.eth.abi.encodeFunctionSignature('sellToken(uint256,uint256)');
-			const events = transactions.map(tx => {
-				let input = tx.get('input')
-				let buyTransaction = null
-				let sellTransaction = null
-				if (input.slice(0, 10) === buyTokenPrefix) {
-					buyTransaction = window.web3.eth.abi.decodeParameters(['uint256', 'uint256'], input.replace(buyTokenPrefix,''))
-				} else if (input.slice(0, 10) === sellTokenPrefix)
-					sellTransaction = window.web3.eth.abi.decodeParameters(['uint256', 'uint256'], input.replace(sellTokenPrefix, ''))
-
-				let buyEvents = (buyTransaction !== null && {type: "buy", amount: buyTransaction[0], expected: buyTransaction[1]})
-				let sellEvents = (sellTransaction !== null && {type: "sell", amount: sellTransaction[0], expected: sellTransaction[1]})
-				return {
-					...buyEvents,
-					...sellEvents
-				}
-			})
-			return events
+			console.log(transactions)
 		}
 	},
 	async mounted() {
