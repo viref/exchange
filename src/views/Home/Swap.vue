@@ -71,7 +71,7 @@ export default {
 			this.values = [0, 0]
 		},
 		swap() {
-			let expected = (BigInt(this.values[1])*BigInt(10**this.VREF.decimals)).toString();
+			let expected = BigInt(parseFloat(this.values[1])*10**this.VREF.decimals).toString();
 			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], expected).finally(e => this.loading = false);
 			else return this.buyToken(this.values[0], expected).finally(e => this.loading = false);
 		},

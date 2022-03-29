@@ -10,6 +10,7 @@
     "@walletconnect/web3-provider": "^1.7.5",
     "chart.js": "^3.7.1",
     "core-js": "^3.6.5",
+    "function-plot": "^1.22.8",
     "moralis": "^1.5.5",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
