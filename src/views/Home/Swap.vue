@@ -56,6 +56,7 @@ export default {
 		}
 	},
 	methods: {
+		...mapMutations(['setValues']),
 		async setMax() {
 			this.loading = true;
 			let value = await this[this.coins[0].toUpperCase()].methods.balanceOf(this.accounts[0]).call();
@@ -66,7 +67,7 @@ export default {
 		},
 		switchCoin() {
 			this.coins.reverse()
-			this.values = [0, 0]
+			this.setValues([0, 0])
 		},
 		swap() {
 			let expected = BigInt(parseFloat(this.values[1])*10**this.VREF.decimals*0.995).toString();
@@ -81,7 +82,7 @@ export default {
 		},
 		async doCalculate() {
 			if ( this.loading ) return false;
-			if ( !this.values[0] ) return this.values = [0, 0];
+			if ( !this.values[0] ) return this.setValues([0, 0]);
 			this.loading = true;
 			let _moneyInPool = (await this.VREF.methods._moneyInPool().call())/10**this.VREF.decimals;
 			let _tokenInPool = (await this.VREF.methods._tokenInPool().call())/10**this.VREF.decimals;

@@ -57,11 +57,12 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setReceived']),
     setMax() {
       console.log("hello")
     },
     updateReceivedAmount(amount) {
-      this.received = amount[0];
+      this.setReceived(amount[0])
       this.currency = amount[1];
     }
   }

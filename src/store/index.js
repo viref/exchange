@@ -46,6 +46,12 @@ export default new Vuex.Store({
       if ( accounts && accounts.length )
         state.accounts = accounts;
     },
+    setReceived(state, received) {
+      state.received = received
+    },
+    setValues(state, values) {
+      state.values = values
+    }
   },
   actions: {
   },
