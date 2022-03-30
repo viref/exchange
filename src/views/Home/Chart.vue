@@ -218,10 +218,10 @@ export default {
 			}
 			const transactions = await Moralis.Cloud.run("getTransactions", params)
 			this.transactions = transactions.map(tx => ({
-				transactionHash: "ccc",
+				transactionHash: tx.transaction_hash,
 				event: tx.type,
 				data: {
-					address: "abcdef",
+					address: tx.address,
 					amount: tx.amount
 				}
 			}))
