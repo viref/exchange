@@ -35,14 +35,12 @@ export default {
 	},
 	data() {
 		return {
-			coins: ["vref", "usdc"],
-			values: [0, 0],
 			loading: false,
 			timer: null
 		}
 	},
 	computed: {
-		...mapGetters(['accounts'])
+		...mapGetters(['accounts', 'coins', 'values'])
 	},
 	watch: {
 		'values.0': {

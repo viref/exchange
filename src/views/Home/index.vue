@@ -44,13 +44,11 @@ export default {
   },
   data() {
     return {
-      received: 0,
-      slippage: 0.2,
       currency: ''
     }
   },
   computed: {
-    ...mapGetters(['isConnected']),
+    ...mapGetters(['isConnected', 'received', 'slippage']),
     slippageReceived() {
       return parseInt((this.received * (1-this.slippage/100))*100)/100
     },

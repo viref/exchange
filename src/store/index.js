@@ -22,7 +22,11 @@ function initState() {
     history: [],
     selectedTx: -1,
     supportedNetworks,
-    accounts: []
+    accounts: [],
+    coins: ["vref", "usdc"],
+    values: [0, 0],
+    received: 0,
+    slippage: 0.2,
   }
 }
 
@@ -64,5 +68,9 @@ export default new Vuex.Store({
       return state.accounts && state.accounts.length && cachedProviderName;
     },
     accounts: state => state.accounts,
+    coins: state => state.coins,
+    values: state => state.values,
+    received: state => state.received,
+    slippage: state => state.slippage
   }
 })
