@@ -27,6 +27,7 @@
         </box>
       </div>
     </div>
+    
   </div>
 </template>
 

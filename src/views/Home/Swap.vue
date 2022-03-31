@@ -40,7 +40,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['accounts', 'coins', 'values'])
+		...mapGetters(['accounts', 'coins', 'values', 'slippageReceived'])
 	},
 	watch: {
 		'values.0': {
@@ -106,7 +106,6 @@ export default {
 			let from = this.accounts[0];
 			amount = BigInt(parseFloat(amount) * 10**this.USDC.decimals).toString();
 			try {
-				await this.getEstimateGas('buyToken', amount, expected)
 				let approved = await this.USDC.methods.allowance(from, this.vref.address).call({ from });
 				if ( !approved || parseFloat(approved)<amount ) {
 					let approve = await this.USDC.methods.approve(this.vref.address, amount).send({ from });
@@ -116,8 +115,7 @@ export default {
 						return false;
 					}
 				}
-				console.log({expected})
-				// expected = 0
+				await this.getEstimateGas('buyToken', amount, expected);
 				this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
 					let status = result.status;
 					if ( status ) window.location.reload();
@@ -125,7 +123,7 @@ export default {
 					this.loading = false;
 				});
 			} catch (error) {
-				console.log(error)
+				alert(error.message)
 			}
 		},
 		async sellToken(amount, expected=0) {

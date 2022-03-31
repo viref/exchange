@@ -110,8 +110,8 @@ export default {
 			.catch(error => {
 				let errorSignature = window.web3.eth.abi.encodeFunctionSignature('Error(string)')
 				let errorObj = JSON.parse(error.message.replace('Internal JSON-RPC error.', ''))
-        		let errorMessage = window.web3.eth.abi.decodeParameter('string', errorObj.data.replace(errorSignature, ''))
-				throw new Error(errorMessage)
+        		let message = window.web3.eth.abi.decodeParameter('string', errorObj.data.replace(errorSignature, ''))
+				throw { message }
 			})
 		}
 	},

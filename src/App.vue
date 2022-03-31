@@ -75,6 +75,7 @@ html {
               url("./assets/Vector.svg") left bottom no-repeat, 
               url("./assets/Star 4.svg") 80vw 10vh no-repeat,
               url("./assets/Star 3.svg") 70vw 20vh no-repeat #061D27;
+  background-attachment: fixed;
 }
 body{
   font-family: 'Mulish', sans-serif;

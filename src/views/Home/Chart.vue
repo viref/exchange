@@ -161,54 +161,53 @@ export default {
 	      }]
 	    },
 		drawChart() {
-	      if ( this.chart ) {
-	        this.chart.data.datasets = this.chartDatasets();
-	        this.chart.update()
-	        return;
-	      }
-	      const ctx = this.$refs['myChart'].getContext('2d');
-	      this.chart = new Chart(ctx, {
-	        data: {
-	          datasets: this.chartDatasets()
-	        },
-	        options: {
-	          scales: {
-	            y: {
-	              beginAtZero: true
-	            }
-	          },
-	          animation: {
-	            duration: 0
-	          }
-	        }
-	      });
-	    },
-	    loadForecast(maxPrice, maxMoney) {
-	      return fetch(`https://vinet.gostudio.co/forecast?maxPrice=${maxPrice}&maxMoney=${maxMoney}`).then(res => res.json()).then(res => {
-	        this.forecastData = res;
-	        return true;
-	      }).catch(e => {
-	        return []
-	      })
-	    },
-	    async getEvents(server) {
-		  Moralis.start(server)
-		  const params = {
-		    limit: 0,
-		    offset: 0,
-		  };
-		  return Moralis.Cloud.run('getBuyEvents', params).then(txs => {
-				this.transactions = txs.result.map(tx => ({
-					transactionHash: tx.transaction_hash,
-					event: "buy",
-					data: tx.data
-				}));
-				this.setHistory(this.transactions);
-				return true;
-	    	});
+      if ( this.chart ) {
+        this.chart.data.datasets = this.chartDatasets();
+        this.chart.update()
+        return;
+      }
+      const ctx = this.$refs['myChart'].getContext('2d');
+      this.chart = new Chart(ctx, {
+        data: {
+          datasets: this.chartDatasets()
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
+          animation: {
+            duration: 0
+          }
+        }
+      });
+    },
+    loadForecast(maxPrice, maxMoney) {
+      return fetch(`https://vinet.gostudio.co/forecast?maxPrice=${maxPrice}&maxMoney=${maxMoney}`).then(res => res.json()).then(res => {
+        this.forecastData = res;
+        return true;
+      }).catch(e => {
+        return []
+      })
+    },
+    async getEvents(server) {
+	  Moralis.start(server)
+	  const params = {
+	    limit: 0,
+	    offset: 0,
+	  };
+	  return Moralis.Cloud.run('getBuyEvents', params).then(txs => {
+			this.transactions = txs.result.map(tx => ({
+				transactionHash: tx.transaction_hash,
+				event: "buy",
+				data: tx.data
+			}));
+			this.setHistory(this.transactions);
+			return true;
+    	});
 		},
 		async getContractEvents(server, fromDate, toDate, address) {
-			console.log("Hello")
 			Moralis.start(server)
 			const params = {
 				networkId: this.chainId,
@@ -225,8 +224,8 @@ export default {
 					amount: tx.amount
 				}
 			}))
+			// console.log(this.transactions);
 			this.setHistory(this.transactions);
-			console.log(this.transactions)
 		}
 	},
 	async mounted() {
