@@ -8,12 +8,12 @@
         <chart />
       </box>
       <div class="col-sm-12 col-md-4">
-        <swap @update="updateReceivedAmount" />
+        <swap />
         <box>
-          <ul v-if="received" class="list-note">
+          <ul v-if="slippageReceived" class="list-note">
             <li>Tối thiểu nhận được</li>
             <li><img src="../../assets/faq.png" class="faq" /></li>
-            <li>{{ slippageReceived }} {{ currency.toUpperCase() }}</li>
+            <li>{{ slippageReceived.toLocaleString() }} {{ coins[1].toUpperCase() }}</li>
           </ul>
           <ul class="list-note">
             <li>Trượt giá tối đa</li>
@@ -21,7 +21,7 @@
           </ul>
           <ul class="list-note">
             <li>Phí thanh khoản</li>
-            <li>{{ exchangeFee }} {{ currency.toUpperCase() }}</li>
+            <li>{{ exchangeFee }} {{ coins[1].toUpperCase() }}</li>
           </ul>
           <div class="clear"></div>
         </box>
@@ -44,27 +44,16 @@ export default {
   },
   data() {
     return {
-      currency: ''
     }
   },
   computed: {
-    ...mapGetters(['isConnected', 'received', 'slippage']),
-    slippageReceived() {
-      return parseInt((this.received * (1-this.slippage/100))*100)/100
-    },
+    ...mapGetters(['isConnected', 'slippageReceived', 'slippage', 'coins']),
     exchangeFee() {
-      return this.currency=='vref'?1:0.1;
+      return 0;//this.currency=='vref'?1:0.1;
     }
   },
   methods: {
-    ...mapMutations(['setReceived']),
-    setMax() {
-      console.log("hello")
-    },
-    updateReceivedAmount(amount) {
-      this.setReceived(amount[0])
-      this.currency = amount[1];
-    }
+    
   }
 }
 </script>

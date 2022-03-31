@@ -25,7 +25,6 @@ function initState() {
     accounts: [],
     coins: ["vref", "usdc"],
     values: [0, 0],
-    received: 0,
     slippage: 0.2,
   }
 }
@@ -45,9 +44,6 @@ export default new Vuex.Store({
     setAccounts(state, accounts) {
       if ( accounts && accounts.length )
         state.accounts = accounts;
-    },
-    setReceived(state, received) {
-      state.received = received
     },
     setValues(state, values) {
       state.values = values
@@ -76,7 +72,7 @@ export default new Vuex.Store({
     accounts: state => state.accounts,
     coins: state => state.coins,
     values: state => state.values,
-    received: state => state.received,
-    slippage: state => state.slippage
+    slippage: state => state.slippage,
+    slippageReceived: state => parseInt((state.values[1] * (1-state.slippage/100))*100)/100
   }
 })
