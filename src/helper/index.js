@@ -101,7 +101,19 @@ export default {
 	      } else {
 	        console.log('Please install MetaMask!');
 	      }
-	    }
+	    },
+		async getEstimateGas(method, amount, expected) {
+			let address = await this.getAccounts().then((accounts) => (accounts[0]).toLowerCase())
+			return this.VREF.methods[`${method}`](amount, expected)
+			.estimateGas({from: address})
+			.then((gas) => {console.log(window.web3.utils.fromWei(BigInt(parseFloat(gas)).toString(), 'gwei'))})
+			.catch(error => {
+				let errorSignature = window.web3.eth.abi.encodeFunctionSignature('Error(string)')
+				let errorObj = JSON.parse(error.message.replace('Internal JSON-RPC error.', ''))
+        		let errorMessage = window.web3.eth.abi.decodeParameter('string', errorObj.data.replace(errorSignature, ''))
+				throw new Error(errorMessage)
+			})
+		}
 	},
 	mounted() {
 		this.USDC = window.USDC;

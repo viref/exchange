@@ -70,7 +70,7 @@ export default {
 			this.setValues([0, 0])
 		},
 		swap() {
-			let expected = BigInt(parseFloat(this.values[1])*10**this.VREF.decimals*0.995).toString();
+			let expected = BigInt(parseFloat(this.values[1])*10**this.VREF.decimals).toString();
 			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], expected).finally(e => this.loading = false);
 			else return this.buyToken(this.values[0], expected).finally(e => this.loading = false);
 		},
@@ -97,7 +97,6 @@ export default {
 				let subIDOSold = await this.VREF.methods.subIDOSold().call()/10**this.VREF.decimals;
 				delta = pool.buy(_tokenInPool, _moneyInPool, currentStep, state, subIDOSold, this.values[0]);
 			}
-
 			this.loading = false;
 			return this.$set(this.values, 1, delta);
 		},
@@ -106,31 +105,38 @@ export default {
 			this.loading = true;
 			let from = this.accounts[0];
 			amount = BigInt(parseFloat(amount) * 10**this.USDC.decimals).toString();
-			let approved = await this.USDC.methods.allowance(from, this.vref.address).call({ from });
-			if ( !approved || parseFloat(approved)<amount ) {
-				let approve = await this.USDC.methods.approve(this.vref.address, amount).send({ from });
-				if ( !approve || !approve.status ) {
-					this.loading = false;
-					this.error = "Contract cannot access your money";
-					return false;
+			try {
+				await this.getEstimateGas('buyToken', amount, expected)
+				let approved = await this.USDC.methods.allowance(from, this.vref.address).call({ from });
+				if ( !approved || parseFloat(approved)<amount ) {
+					let approve = await this.USDC.methods.approve(this.vref.address, amount).send({ from });
+					if ( !approve || !approve.status ) {
+						this.loading = false;
+						this.error = "Contract cannot access your money";
+						return false;
+					}
 				}
+				console.log({expected})
+				// expected = 0
+				this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
+					let status = result.status;
+					if ( status ) window.location.reload();
+				}).finally(e => {
+					this.loading = false;
+				});
+			} catch (error) {
+				console.log(error)
 			}
-			console.log({expected})
-			// expected = 0
-      this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
-      	let status = result.status;
-      	if ( status ) window.location.reload();
-      }).finally(e => {
-      	this.loading = false;
-      });
-	  },
+		},
 		async sellToken(amount, expected=0) {
 			let from = this.accounts[0];
 			if ( !amount ) return;
 			this.loading = true;
 			amount = BigInt(parseFloat(amount) * 10**this.VREF.decimals).toString();
-			let approved = await this.VREF.methods.allowance(from, this.vref.address).call({ from });
-			if ( !approved || parseFloat(approved)<amount ) {
+			try {
+				this.getEstimateGas('sellToken', amount, expected || 0)
+				let approved = await this.VREF.methods.allowance(from, this.vref.address).call({ from });
+				if ( !approved || parseFloat(approved)<amount ) {
 				let approve = await this.VREF.methods.approve(this.vref.address, amount).send({ from });
 				if ( !approve || !approve.status ) {
 					this.loading = false;
@@ -138,14 +144,16 @@ export default {
 					return false;
 				}
 			}
-
-      this.VREF.methods.sellToken(amount, expected || 0).send({ from }).then(result => {
-      	let status = result.status;
-      	if ( status ) window.location.reload();
-      }).finally(e => {
-      	this.loading = false;
-      });
-	  }
+				this.VREF.methods.sellToken(amount, expected || 0).send({ from }).then(result => {
+					let status = result.status;
+					if ( status ) window.location.reload();
+				}).finally(e => {
+					this.loading = false;
+				});
+			} catch (error) {
+				console.log(error)
+			}
+		}
 	},
 	mounted() {
 
