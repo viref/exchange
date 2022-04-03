@@ -6,16 +6,16 @@
       </h3>
       <crypto-input :currency="coins[0]" v-model="values[0]"
       	label="Từ" :set-max="isConnected ? setMax : null"
-      	:disabled="!isConnected" />
+      	:disabled="!isConnected" :contract="getConfig(coins[0])" />
       <div style="text-align: center;">
-      	<a class="btn-switch" href="#" v-on:click.prevent.stop="switchCoin">
+      	<a class="btn-switch" href="#" v-on:click.prevent.stop="switchCoin" title="Switch token">
       		<div style="width: 20px; height: 20px; text-align: center; line-height: 20px;">
 	      		<loading v-if="loading" />
 	      		<img v-else src="../../assets/arrow-down.png">
 	      	</div>
       	</a>
       </div>
-      <crypto-input :currency="coins[1]" :value="values[1]" label="Sang" :disabled="!isConnected || loading" />
+      <crypto-input :currency="coins[1]" :value="values[1]" label="Sang" :disabled="!isConnected || loading" :contract="getConfig(coins[1])" />
       <div class="note">Giá trị nhận được chỉ mang tính chất tương đối do biến động tại thời điểm lệnh được thực thi.</div>
       <button v-if="isConnected" class="button" @click="swap" :disabled="loading">{{ loading?'Đang xử lý':'Chuyển đổi' }}</button>
       <button v-else class="button" @click="connectWallet">Liên kết ví</button>
@@ -151,6 +151,9 @@ export default {
 			} catch (error) {
 				console.log(error)
 			}
+		},
+		getConfig(name) {
+			return this[name] || {};
 		}
 	},
 	mounted() {

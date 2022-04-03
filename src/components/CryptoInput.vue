@@ -1,6 +1,12 @@
 <template>
 	<div class="currency-input">
-	  <div class="label">{{ label }}</div>
+	  <div class="label">
+	  	{{ label }}
+	  	<div style="float: right;" v-if="contract">
+	  		<a href="#addToMetamask" @click.prevent="addMetamask()" class="addMetamask" :title="`Add ${currency.toUpperCase()} to Metamask`"></a>
+	  		<a href="#copy" class="copy" @click.prevent="copyAddress()" :title="`Copy ${currency.toUpperCase()} address`"></a>
+	  	</div>
+	  </div>
 	  <div class="text-input">
 	    <div class="currency">
 	      <img :src="`/img/${currency}-mini.png`">
@@ -14,8 +20,9 @@
 	</div>
 </template>
 <script type="text/javascript">
+import functions from '../helper/functions'
 export default {
-	props: ['currency', 'label', 'setMax', 'value', 'disabled'],
+	props: ['currency', 'label', 'setMax', 'value', 'disabled', 'contract'],
 	data() {
 		return {
 
@@ -32,6 +39,39 @@ export default {
 			value = value || "0";
 			let n = parseFloat(value.replace(/\,/g,''));
 			this.$emit('input', n)
+		},
+		async addMetamask() {
+			const tokenAddress = this.address;
+			const tokenSymbol = 'TUT';
+			const tokenDecimals = 18;
+			const tokenImage = 'http://placekitten.com/200/300';
+
+			try {
+			  // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+			  const wasAdded = await ethereum.request({
+			    method: 'wallet_watchAsset',
+			    params: {
+			      type: 'ERC20', // Initially only supports ERC20, but eventually more!
+			      options: {
+			        address: this.contract.address,
+			        symbol: this.contract.symbol,
+			        decimals: this.contract.decimals,
+			        image: ''
+			      },
+			    },
+			  });
+
+			  if (wasAdded) {
+			    console.log('Thanks for your interest!');
+			  } else {
+			    console.log('Your loss!');
+			  }
+			} catch (error) {
+			  console.log(error);
+			}
+		},
+		copyAddress() {
+			functions.copyToClipboard(this.address);
 		}
 	},
 	mounted() {
@@ -46,6 +86,7 @@ export default {
 .currency-input .label {
   opacity: 0.8;
   font-size: 16px;
+  line-height: 20px;
 }
 .currency-input .text-input {
   background: linear-gradient(90.51deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
@@ -94,5 +135,25 @@ input::-webkit-inner-spin-button {
   float: right;
   margin-top: 8px;
   display: block;
+}
+.copy, .addMetamask {
+	display: block;
+	float: right;
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	margin-right: 10px;
+	opacity: 0.7;
+}
+.copy:hover, .addMetamask:hover {
+	opacity: 1;
+}
+.copy {
+	background-image: url("../assets/icon-copy.png");
+}
+.addMetamask {
+	background-image: url("../assets/icon-metamask.png");
 }
 </style>

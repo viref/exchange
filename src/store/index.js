@@ -57,6 +57,8 @@ export default new Vuex.Store({
       if ( !chain ) return null;
       return {
         address: contracts[id].address[chain.symbol],
+        symbol: contracts[id].symbol,
+        decimals: contracts[id].decimals,
         abi: contracts[id].abi
       }
     },
