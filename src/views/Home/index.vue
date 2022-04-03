@@ -3,7 +3,7 @@
     <div class="row">
       <box class="col-sm-12 col-md-8">
         <h3>
-          Biểu đồ giá theo thời gian
+          Chart
         </h3>
         <chart />
       </box>
@@ -11,16 +11,16 @@
         <swap />
         <box>
           <ul v-if="slippageReceived" class="list-note">
-            <li>Tối thiểu nhận được</li>
+            <li>Minimum received</li>
             <li><img src="../../assets/faq.png" class="faq" /></li>
             <li>{{ slippageReceived.toLocaleString() }} {{ coins[1].toUpperCase() }}</li>
           </ul>
           <ul class="list-note">
-            <li>Trượt giá tối đa</li>
-            <li style="color: #53A548">+ {{ slippage }}%</li>
+            <li>Price Impact</li>
+            <li style="color: #53A548">< {{ slippage }}%</li>
           </ul>
           <ul class="list-note">
-            <li>Phí thanh khoản</li>
+            <li>Liquidity Provider Fee</li>
             <li>{{ exchangeFee }} {{ coins[1].toUpperCase() }}</li>
           </ul>
           <div class="clear"></div>

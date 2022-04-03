@@ -145,7 +145,7 @@ input::-webkit-inner-spin-button {
 	background-position: center;
 	background-size: cover;
 	margin-right: 10px;
-	opacity: 0.7;
+	opacity: 0.8;
 }
 .copy:hover, .addMetamask:hover {
 	opacity: 1;

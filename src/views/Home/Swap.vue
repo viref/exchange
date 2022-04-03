@@ -1,11 +1,11 @@
 <template>
 	<box title="Swap">
       <h3>
-        Trao đổi
+        Swap
         <a href="#" class="setting"><img src="../../assets/setting.png"></a>
       </h3>
       <crypto-input :currency="coins[0]" v-model="values[0]"
-      	label="Từ" :set-max="isConnected ? setMax : null"
+      	label="From" :set-max="isConnected ? setMax : null"
       	:disabled="!isConnected" :contract="getConfig(coins[0])" />
       <div style="text-align: center;">
       	<a class="btn-switch" href="#" v-on:click.prevent.stop="switchCoin" title="Switch token">
@@ -15,10 +15,10 @@
 	      	</div>
       	</a>
       </div>
-      <crypto-input :currency="coins[1]" :value="values[1]" label="Sang" :disabled="!isConnected || loading" :contract="getConfig(coins[1])" />
-      <div class="note">Giá trị nhận được chỉ mang tính chất tương đối do biến động tại thời điểm lệnh được thực thi.</div>
+      <crypto-input :currency="coins[1]" :value="values[1]" label="To" :disabled="!isConnected || loading" :contract="getConfig(coins[1])" />
+      <div class="note">The value received is estimated.</div>
       <button v-if="isConnected" class="button" @click="swap" :disabled="loading">{{ loading?'Đang xử lý':'Chuyển đổi' }}</button>
-      <button v-else class="button" @click="connectWallet">Liên kết ví</button>
+      <button v-else class="button" @click="connectWallet">Connect wallet</button>
     </box>
 </template>
 <script type="text/javascript">
