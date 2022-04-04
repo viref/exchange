@@ -10,8 +10,8 @@
 	"image": "https://viref.net/coin.png",
 	"moralis": {
 		"bsc": {
-			"serverUrl": "https://qgeh9hmjvtyr.usemoralis.com:2053/server",
-			"appId": "0pu2R2muyfVlrpWQaniDCWNMJSLCzPLHsgByV9pX"
+			"serverUrl": "https://epkojwbhawzf.usemoralis.com:2053/server",
+			"appId": "LdQ2BaxihpGAEKiWNaOMAZfvLm1Wxo8ajK77UKV7"
 		},
 		"bsctest": {
 			"serverUrl": "https://an4zp46jspiq.usemoralis.com:2053/server",

@@ -132,7 +132,7 @@ export default {
 			this.loading = true;
 			amount = BigInt(parseFloat(amount) * 10**this.VREF.decimals).toString();
 			try {
-				this.getEstimateGas('sellToken', amount, expected || 0)
+				await this.getEstimateGas('sellToken', amount, expected || 0)
 				let approved = await this.VREF.methods.allowance(from, this.vref.address).call({ from });
 				if ( !approved || parseFloat(approved)<amount ) {
 				let approve = await this.VREF.methods.approve(this.vref.address, amount).send({ from });
@@ -156,8 +156,7 @@ export default {
 			return this[name] || {};
 		}
 	},
-	mounted() {
-
+	mounted() {		
 	},
 	mixins: [helper]
 }
