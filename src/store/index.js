@@ -26,6 +26,8 @@ function initState() {
     coins: ["vref", "usdc"],
     values: [0, 0],
     slippage: 0.2,
+    tokenInPool: 0,
+    moneyInPool: 0
   }
 }
 
@@ -47,6 +49,10 @@ export default new Vuex.Store({
     },
     setValues(state, values) {
       state.values = values
+    },
+    setPoolState(state, poolState) {
+      state.tokenInPool = poolState.tokenInPool;
+      state.moneyInPool = poolState.moneyInPool;
     }
   },
   actions: {
@@ -76,6 +82,7 @@ export default new Vuex.Store({
     coins: state => state.coins,
     values: state => state.values,
     slippage: state => state.slippage,
-    slippageReceived: state => parseInt((state.values[1] * (1-state.slippage/100))*100)/100
+    slippageReceived: state => parseInt((state.values[1] * (1-state.slippage/100))*100)/100,
+    currentPrice: state => state.tokenInPool ? parseInt(state.moneyInPool*100/state.tokenInPool)/100 : 0
   }
 })

@@ -15,6 +15,10 @@
             <li><img src="../../assets/faq.png" class="faq" /></li>
             <li>{{ slippageReceived.toLocaleString() }} {{ coins[1].toUpperCase() }}</li>
           </ul>
+          <ul v-if="currentPrice" class="list-note">
+            <li>Current Price</li>
+            <li>{{ currentPrice }} USDC/VREF</li>
+          </ul>
           <ul class="list-note">
             <li>Price Impact</li>
             <li style="color: #53A548">< {{ slippage }}%</li>
@@ -27,7 +31,6 @@
         </box>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -48,7 +51,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isConnected', 'slippageReceived', 'slippage', 'coins']),
+    ...mapGetters(['isConnected', 'slippageReceived', 'slippage', 'coins', 'currentPrice']),
     exchangeFee() {
       return 0;//this.currency=='vref'?1:0.1;
     }

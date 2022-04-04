@@ -95,11 +95,15 @@ export default {
 			this.moneyInPool = Web3.utils.fromWei(_moneyInPool, 'ether');
 			this.tokenInPool = Web3.utils.fromWei(_tokenInPool, 'ether');
 
+			this.setPoolState({
+				moneyInPool: this.moneyInPool,
+				tokenInPool: this.tokenInPool
+			})
+
 			if ( vref.moralis[this.chainName] ) {
 				// this.getEvents(vref.moralis[this.chainName]);
 				this.getContractEvents(vref.moralis[this.chainName])
 			}
-
 		},
 		history: {
 	      deep: true,
@@ -137,7 +141,7 @@ export default {
 	    }
 	},
 	methods: {
-		...mapMutations([ 'setHistory', 'setSelectedTx' ]),
+		...mapMutations([ 'setHistory', 'setSelectedTx', 'setPoolState' ]),
 		chartDatasets() {
 	      let type = 'price-token';
 	      let bubbles = this.historyData.map((p,idx) => ({
