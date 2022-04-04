@@ -7,6 +7,7 @@
 	},
 	"symbol": "VREF",
 	"decimals": 18,
+	"image": "https://viref.net/coin.png",
 	"moralis": {
 		"bsc": {
 			"serverUrl": "https://qgeh9hmjvtyr.usemoralis.com:2053/server",

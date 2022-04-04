@@ -59,6 +59,7 @@ export default new Vuex.Store({
         address: contracts[id].address[chain.symbol],
         symbol: contracts[id].symbol,
         decimals: contracts[id].decimals,
+        image: contracts[id].image || '',
         abi: contracts[id].abi
       }
     },

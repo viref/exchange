@@ -9,7 +9,7 @@
           <li><a href="https://whitepaper.viref.net">Whitepaper</a></li>
         </ul>
         <div class="right-item">
-          <a class="outline-button" href="#" @click="connectWallet">
+          <a class="outline-button" href="#" @click.prevent="connectWallet">
             <img src="./assets/wallet.png" />
             {{ accounts[0] || "Liên kết ví" }}
           </a>

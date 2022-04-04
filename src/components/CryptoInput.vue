@@ -14,7 +14,7 @@
 	    </div>
 	    <input type="text" :disabled="disabled" :value="formatedValue" onclick="this.select()" 
 	    	v-on:input="updateValue($event.target.value)" />
-	    <a v-if="setMax" class="btn-max" href="#" @click="setMax">Max</a>
+	    <a v-if="setMax" class="btn-max" href="#" @click.prevent="setMax">Max</a>
 	    <div class="clear"></div>
 	  </div>
 	</div>
@@ -41,11 +41,6 @@ export default {
 			this.$emit('input', n)
 		},
 		async addMetamask() {
-			const tokenAddress = this.address;
-			const tokenSymbol = 'TUT';
-			const tokenDecimals = 18;
-			const tokenImage = 'http://placekitten.com/200/300';
-
 			try {
 			  // wasAdded is a boolean. Like any RPC method, an error may be thrown.
 			  const wasAdded = await ethereum.request({
@@ -56,7 +51,7 @@ export default {
 			        address: this.contract.address,
 			        symbol: this.contract.symbol,
 			        decimals: this.contract.decimals,
-			        image: ''
+			        image: this.contract.image
 			      },
 			    },
 			  });
@@ -71,7 +66,7 @@ export default {
 			}
 		},
 		copyAddress() {
-			functions.copyToClipboard(this.address);
+			functions.copyToClipboard(this.contract.address);
 		}
 	},
 	mounted() {
