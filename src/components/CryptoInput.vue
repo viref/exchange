@@ -3,8 +3,8 @@
 	  <div class="label">
 	  	{{ label }}
 	  	<div style="float: right;" v-if="contract">
-	  		<a href="#addToMetamask" @click.prevent="addMetamask()" class="addMetamask" :title="`Add ${currency.toUpperCase()} to Metamask`"></a>
-	  		<a href="#copy" class="copy" @click.prevent="copyAddress()" :title="`Copy ${currency.toUpperCase()} address`"></a>
+	  		<VueCustomTooltip :label="`Copy ${currency.toUpperCase()} address`"><a href="#copy" class="copy" @click.prevent="copyAddress()"></a></VueCustomTooltip>
+	  		<VueCustomTooltip :label="`Add ${currency.toUpperCase()} to Metamask`"><a href="#addToMetamask" @click.prevent="addMetamask()" class="addMetamask"></a></VueCustomTooltip>
 	  	</div>
 	  </div>
 	  <div class="text-input">
@@ -21,7 +21,9 @@
 </template>
 <script type="text/javascript">
 import functions from '../helper/functions'
+import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
 export default {
+	components: { VueCustomTooltip },
 	props: ['currency', 'label', 'setMax', 'value', 'disabled', 'contract'],
 	data() {
 		return {

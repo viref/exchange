@@ -61,7 +61,7 @@ export default {
 			this.loading = true;
 			let value = await this[this.coins[0].toUpperCase()].methods.balanceOf(this.accounts[0]).call();
 			value /= 10**(this[this.coins[0].toUpperCase()].decimals);
-			this.$set(this.values, 0, value);
+			this.$set(this.values, 0, parseInt(value));
 			this.loading = false;
 			this.doCalculate();
 		},
