@@ -5,7 +5,7 @@
         <a href="https://viref.net" class="logo"><img src="./assets/viref-logo.png" /></a>
         <ul class="menu">
           <li><a href="https://viref.net" class="active">Trang chủ</a></li>
-          <li><a href="https://blog.viref.net">Blogs</a></li>
+          <!-- <li><a href="https://blog.viref.net">Blogs</a></li> -->
           <li><a href="https://whitepaper.viref.net">Whitepaper</a></li>
         </ul>
         <div class="right-item">
