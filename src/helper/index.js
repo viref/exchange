@@ -86,7 +86,7 @@ export default {
 	      })
 	    },
 	    async disconnectWallet() {
-	      await this.web3Modal.clearCachedProvider();
+	      window.localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER');
 	      window.location.reload();
 	    },
 	    async getAccounts() {
@@ -113,6 +113,9 @@ export default {
         		let message = window.web3.eth.abi.decodeParameter('string', errorObj.data.replace(errorSignature, ''))
 				throw { message }
 			})
+		},
+		async getBalance(token, address) {
+			return this[token.toUpperCase()].methods.balanceOf(address).call();
 		}
 	},
 	mounted() {

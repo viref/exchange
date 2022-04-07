@@ -8,11 +8,12 @@
           <!-- <li><a href="https://blog.viref.net">Blogs</a></li> -->
           <li><a href="https://whitepaper.viref.net">Whitepaper</a></li>
         </ul>
-        <div class="right-item">
+        <div class="right-item" >
           <a class="outline-button" href="#" @click.prevent="connectWallet">
             <img src="./assets/wallet.png" />
             {{ accounts[0] || "Liên kết ví" }}
           </a>
+          <user-popup v-if="accounts[0]" />
         </div>
       </div>
       <div class="clear"></div>
@@ -25,21 +26,30 @@ import './assets/reset.css';
 import './assets/grid.css';
 import helper from "./helper";
 import { mapGetters } from 'vuex';
+import UserPopup from './components/UserPopup';
 
 export default {
-  components: {  },
+  components: { UserPopup },
   data() {
     return {
       loading: true,
       tab: 'contract',
       web3Modal: null,
-      networkId: null
+      networkId: null,
+      popupHidden: false
     }
   },
   computed: {
     ...mapGetters(['accounts']),
     isRightNetwork() {
       return this.usdc && this.usdc.address;
+    }
+  },
+  methods: {
+    showPopup(e) {
+      // let target = e.target;
+      // console.log(target.offsetWidth)
+      // this.popupLeft = target.offsetLeft + target.offsetWidth;
     }
   },
   mounted() {
@@ -102,6 +112,8 @@ a {
   padding: 20px 0;
   color: white;
   margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
@@ -133,11 +145,12 @@ a {
 }
 .right-item {
   float: right;
+  position: relative;
 }
 
 .outline-button {
   display: block;
-  border: 1px solid #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.6);
   box-sizing: border-box;
   border-radius: 8px;
   padding: 8px 16px;
@@ -148,12 +161,15 @@ a {
   text-overflow: ellipsis;
   line-height: 24px;
 }
+.right-item:hover .outline-button {
+  border: 1px solid rgba(255, 255, 255, 1);
+}
 .outline-button img {
   width: 24px;
   float: left;
   margin-right: 8px;
 }
-.box h3 {
+.box h3, .popup h3 {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 20px;

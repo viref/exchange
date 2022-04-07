@@ -59,7 +59,7 @@ export default {
 		...mapMutations(['setValues']),
 		async setMax() {
 			this.loading = true;
-			let value = await this[this.coins[0].toUpperCase()].methods.balanceOf(this.accounts[0]).call();
+			let value = await this.getBalance(this.coins[0], this.accounts[0]);
 			value /= 10**(this[this.coins[0].toUpperCase()].decimals);
 			this.$set(this.values, 0, parseInt(value));
 			this.loading = false;
