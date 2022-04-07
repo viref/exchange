@@ -23,7 +23,7 @@ function initState() {
     selectedTx: -1,
     supportedNetworks,
     accounts: [],
-    coins: ["vref", "usdc"],
+    coins: ["usdc", "vref"],
     balance: {},
     values: [0, 0],
     slippage: 0.2,

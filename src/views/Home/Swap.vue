@@ -116,15 +116,14 @@ export default {
 					}
 				}
 				await this.getEstimateGas('buyToken', amount, expected);
-				this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
+				await this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
 					let status = result.status;
 					if ( status ) window.location.reload();
-				}).finally(e => {
-					this.loading = false;
-				});
+				})
 			} catch (error) {
 				alert(error.message)
 			}
+			this.loading = false;
 		},
 		async sellToken(amount, expected=0) {
 			let from = this.accounts[0];

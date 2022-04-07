@@ -61,6 +61,7 @@ export default {
   width: 400px;
   padding-top: 10px;
   z-index: 100;
+  font-size: 16px;
 }
 .popup-content {
   background: #192E38;
