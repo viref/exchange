@@ -70,7 +70,8 @@ export default {
 			this.setValues([0, 0])
 		},
 		swap() {
-			let expected = BigInt(parseFloat(this.values[1])*10**this.VREF.decimals).toString();
+			let expected = BigInt(parseFloat(this.slippageReceived)*10**this.VREF.decimals).toString();
+			console.log({expected})
 			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], expected).finally(e => this.loading = false);
 			else return this.buyToken(this.values[0], expected).finally(e => this.loading = false);
 		},
@@ -115,6 +116,7 @@ export default {
 						return false;
 					}
 				}
+				console.log({amount, expected})
 				await this.getEstimateGas('buyToken', amount, expected);
 				await this.VREF.methods.buyToken(amount, expected).send({ from }).then(result => {
 					let status = result.status;
