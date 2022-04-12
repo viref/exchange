@@ -109,7 +109,7 @@ export default {
 	      deep: true,
 	      handler(trans) {
 	        if ( trans.length==0 ) return;
-	        fetch("https://vinet.gostudio.co/script", {
+	        fetch("https://jspool.viref.net/script", {
 	          method: "POST",
 	          headers: {
 	            'Content-Type': 'application/json'
@@ -188,7 +188,7 @@ export default {
       });
     },
     loadForecast(maxPrice, maxMoney) {
-      return fetch(`https://vinet.gostudio.co/forecast?maxPrice=${maxPrice}&maxMoney=${maxMoney}`).then(res => res.json()).then(res => {
+      return fetch(`https://jspool.viref.net/forecast?maxPrice=${maxPrice}&maxMoney=${maxMoney}`).then(res => res.json()).then(res => {
         this.forecastData = res;
         return true;
       }).catch(e => {
