@@ -33,7 +33,7 @@ export default {
 	computed: {
 		formatedValue() {
 			let value = this.value || 0;
-    		return parseFloat(value).toLocaleString();
+    	return functions.formatMoney(value, 18);
 		}
 	},
 	methods: {
