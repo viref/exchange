@@ -86,6 +86,7 @@ export default {
   line-height: 20px;
 }
 .currency-input .text-input {
+	position: relative;
   background: linear-gradient(90.51deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   backdrop-filter: blur(24px);
   border-radius: 30px;
@@ -129,8 +130,9 @@ input::-webkit-inner-spin-button {
   box-sizing: border-box;
   border-radius: 8px;
   padding: 4px 8px;
-  float: right;
-  margin-top: 8px;
+  position: absolute;
+  right: 16px;
+  top: 16px;
   display: block;
 }
 .copy, .addMetamask {

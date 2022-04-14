@@ -105,7 +105,7 @@ export default {
 			if ( !amount ) return;
 			this.loading = true;
 			let from = this.accounts[0];
-			amount = BigInt(parseFloat(amount) * 10**this.USDC.decimals).toString();
+			amount = BigInt(Number(amount) * 10**this.USDC.decimals).toString();
 			try {
 				let approved = await this.USDC.methods.allowance(from, this.vref.address).call({ from });
 				if ( !approved || parseFloat(approved)<amount ) {
@@ -131,7 +131,7 @@ export default {
 			let from = this.accounts[0];
 			if ( !amount ) return;
 			this.loading = true;
-			amount = BigInt(parseFloat(amount) * 10**this.VREF.decimals).toString();
+			amount = BigInt(Number(amount) * 10**this.VREF.decimals).toString();
 			try {
 				await this.getEstimateGas('sellToken', amount, expected || 0)
 				let approved = await this.VREF.methods.allowance(from, this.vref.address).call({ from });
