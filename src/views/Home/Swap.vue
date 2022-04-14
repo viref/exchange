@@ -70,7 +70,7 @@ export default {
 			this.setValues([0, 0])
 		},
 		swap() {
-			let expected = BigInt(parseFloat(this.slippageReceived)*10**this.VREF.decimals).toString();
+			let expected = BigInt(Number(this.slippageReceived)*10**this.VREF.decimals).toString();
 			console.log({expected})
 			if ( this.coins[0]=='vref' ) return this.sellToken(this.values[0], expected).finally(e => this.loading = false);
 			else return this.buyToken(this.values[0], expected).finally(e => this.loading = false);
@@ -108,7 +108,7 @@ export default {
 			amount = BigInt(Number(amount) * 10**this.USDC.decimals).toString();
 			try {
 				let approved = await this.USDC.methods.allowance(from, this.vref.address).call({ from });
-				if ( !approved || parseFloat(approved)<amount ) {
+				if ( !approved || Number(approved)<amount ) {
 					let approve = await this.USDC.methods.approve(this.vref.address, amount).send({ from });
 					if ( !approve || !approve.status ) {
 						this.loading = false;
@@ -135,7 +135,7 @@ export default {
 			try {
 				await this.getEstimateGas('sellToken', amount, expected || 0)
 				let approved = await this.VREF.methods.allowance(from, this.vref.address).call({ from });
-				if ( !approved || parseFloat(approved)<amount ) {
+				if ( !approved || Number(approved)<amount ) {
 				let approve = await this.VREF.methods.approve(this.vref.address, amount).send({ from });
 				if ( !approve || !approve.status ) {
 					this.loading = false;
