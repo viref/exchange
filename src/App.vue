@@ -4,14 +4,14 @@
       <div class="container">
         <a href="https://viref.net" class="logo"><img src="./assets/viref-logo.png" /></a>
         <ul class="menu">
-          <li><a href="https://viref.net" class="active">Trang chủ</a></li>
-          <!-- <li><a href="https://blog.viref.net">Blogs</a></li> -->
+          <!-- <li><a href="https://viref.net" class="active">Home</a></li> -->
+          <li><a href="https://bscscan.com/address/0x2b7Cc0556F82A23e17eD47339081c0160CCC64FC#code" target="_blank">Contract</a></li>
           <li><a href="https://whitepaper.viref.net">Whitepaper</a></li>
         </ul>
         <div class="right-item" >
           <a class="outline-button" href="#" @click.prevent="connectWallet">
             <img src="./assets/wallet.png" />
-            {{ accounts[0] || "Liên kết ví" }}
+            {{ accounts[0] || "Connect wallet" }}
           </a>
           <user-popup v-if="accounts[0]" />
         </div>
