@@ -11,7 +11,7 @@
         <div class="right-item" >
           <a class="outline-button" href="#" @click.prevent="connectWallet">
             <img src="./assets/wallet.png" />
-            {{ accounts[0] || "Connect wallet" }}
+            {{ buttonTitle }}
           </a>
           <user-popup v-if="accounts[0]" />
         </div>
@@ -26,6 +26,7 @@ import './assets/reset.css';
 import './assets/grid.css';
 import helper from "./helper";
 import { mapGetters } from 'vuex';
+import truncateMiddle from 'truncate-middle';
 import UserPopup from './components/UserPopup';
 
 export default {
@@ -43,6 +44,10 @@ export default {
     ...mapGetters(['accounts']),
     isRightNetwork() {
       return this.usdc && this.usdc.address;
+    },
+    buttonTitle() {
+      if ( this.accounts[0] ) return truncateMiddle(this.accounts[0], 5, 4, '...');
+      else return 'Connect wallet'
     }
   },
   methods: {
