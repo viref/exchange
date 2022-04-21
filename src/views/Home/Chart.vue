@@ -1,5 +1,13 @@
 <template>
-	<div class="chart-container"><canvas ref="myChart" style="width: 96%;"></canvas>
+	<div class="chart-container">
+		<canvas v-show="tabItem === 'dotChart'" ref="myChart" style="width: 96%;"></canvas>
+		<iframe 
+			v-show="tabItem === 'candleChart'" 
+			src="http://localhost:9090/public"
+			frameborder="0"
+			style="width: 96%;height:500px;"
+		>
+		</iframe>
 		<!-- <div style="color: black;">
 			<p>moneyInPool: {{ moneyInPool }}</p>
 			<p>tokenInPool: {{ tokenInPool }}</p>
@@ -68,6 +76,11 @@ import vref from "../../contract/vref.json";
 import Moralis from 'moralis/dist/moralis.min.js';
 
 export default {
+	props: {
+		tabItem: {
+			type: String
+		}
+	},
 	data() {
 		return {
 			chart: null,

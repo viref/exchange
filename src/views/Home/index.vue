@@ -1,11 +1,19 @@
 <template>
   <div class="container bootstrap-wrapper">
+    <div class="row col-sm-12 col-md-8">
+      <box class="tab">
+        <p @click.prevent="selectTab('dotChart')" :class="{ active: tabItem==='dotChart' }" href="#dotChart">Dot Chart</p>
+      </box>  
+      <box class="tab">
+        <p @click.prevent="selectTab('candleChart')" :class="{ active: tabItem==='candleChart' }" href="#candleChart">Candle Chart</p>
+      </box>
+    </div>
     <div class="row">
       <box class="col-sm-12 col-md-8">
         <h3>
           Chart
         </h3>
-        <chart />
+        <chart :tab-item="tabItem"/>
       </box>
       <div class="col-sm-12 col-md-4">
         <swap />
@@ -48,6 +56,7 @@ export default {
   },
   data() {
     return {
+      tabItem: 'dotChart'
     }
   },
   computed: {
@@ -57,7 +66,9 @@ export default {
     }
   },
   methods: {
-    
+    selectTab(tabItem) {
+      this.tabItem = tabItem
+    }
   }
 }
 </script>
@@ -85,5 +96,17 @@ export default {
   float: left;
   margin-top: 3px;
   width: 20px;
+}
+.active {
+  color: #FFF;
+}
+.tab p {
+  cursor: pointer;
+}
+.tab p:not(.active) {
+  color: grey;
+}
+.tab:first-child {
+  margin-right: 10px;
 }
 </style>
