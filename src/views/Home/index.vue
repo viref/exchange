@@ -1,13 +1,5 @@
 <template>
   <div class="container bootstrap-wrapper">
-    <div class="row col-sm-12 col-md-8">
-      <box class="tab">
-        <p @click.prevent="selectTab('dotChart')" :class="{ active: tabItem==='dotChart' }" href="#dotChart">Dot Chart</p>
-      </box>  
-      <box class="tab">
-        <p @click.prevent="selectTab('candleChart')" :class="{ active: tabItem==='candleChart' }" href="#candleChart">Candle Chart</p>
-      </box>
-    </div>
     <div class="row">
       <box class="col-sm-12 col-md-8">
         <h3>

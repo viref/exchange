@@ -51,11 +51,6 @@ export default {
     }
   },
   methods: {
-    showPopup(e) {
-      // let target = e.target;
-      // console.log(target.offsetWidth)
-      // this.popupLeft = target.offsetLeft + target.offsetWidth;
-    }
   },
   mounted() {
     if ( window.ethereum ) {

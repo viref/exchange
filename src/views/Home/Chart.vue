@@ -1,9 +1,14 @@
 <template>
 	<div class="chart-container">
-		<canvas v-show="tabItem === 'dotChart'" ref="myChart" style="width: 96%;"></canvas>
+		<ul class="chart-tab">
+			<li><a href="#" :class="{active: tabItem=='dot'}" @click.prevent="tabItem='dot'">Dot Chart</a></li>
+			<li><a href="#" :class="{active: tabItem=='candle'}" @click.prevent="tabItem='candle'">Candle Chart</a></li>
+		</ul>
+		<div class="loading" v-show="loading">Loading...</div>
+		<canvas v-show="tabItem === 'dot'" ref="myChart" style="width: 96%;"></canvas>
 		<iframe 
-			v-show="tabItem === 'candleChart'" 
-			src="http://localhost:9090/public"
+			v-show="tabItem === 'candle'" 
+			src="https://tradingview.viref.net/"
 			frameborder="0"
 			style="width: 96%;height:500px;"
 		>
@@ -76,11 +81,6 @@ import vref from "../../contract/vref.json";
 import Moralis from 'moralis/dist/moralis.min.js';
 
 export default {
-	props: {
-		tabItem: {
-			type: String
-		}
-	},
 	data() {
 		return {
 			chart: null,
@@ -90,7 +90,9 @@ export default {
 			moneyInPool: 0,
 			currentStep: 0,
 			totalSupply: 0,
-			active: true
+			active: true,
+			tabItem: "dot",
+			loading: true
 		}
 	},
 	computed: {
@@ -122,6 +124,7 @@ export default {
 	      deep: true,
 	      handler(trans) {
 	        if ( trans.length==0 ) return;
+	        this.loading = true;
 	        fetch("https://jspool.viref.net/script", {
 	          method: "POST",
 	          headers: {
@@ -146,6 +149,8 @@ export default {
 	          return this.loadForecast(maxPrice, maxMoney).then(res => {
 	            this.drawChart();
 	          })
+	        }).finally(_ => {
+	        	this.loading = false;
 	        })
 	      }
 	    },
@@ -257,5 +262,20 @@ export default {
 	background: white;
 	margin: 0 auto;
 	padding:  20px;
+}
+.chart-tab {
+	width: 100%;
+	display: inline-block;
+	margin-bottom: 20px;
+}
+.chart-tab li {
+	float: left;
+}
+.chart-container, .chart-tab a {
+	color: #192E38;
+	padding: 5px 10px;
+}
+.chart-tab a.active, .chart-tab a:hover {
+	text-decoration: underline;
 }
 </style>
