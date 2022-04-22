@@ -214,19 +214,19 @@ export default {
       })
     },
     async getEvents(server) {
-	  Moralis.start(server)
-	  const params = {
-	    limit: 0,
-	    offset: 0,
-	  };
-	  return Moralis.Cloud.run('getBuyEvents', params).then(txs => {
-			this.transactions = txs.result.map(tx => ({
-				transactionHash: tx.transaction_hash,
-				event: "buy",
-				data: tx.data
-			}));
-			this.setHistory(this.transactions);
-			return true;
+		  Moralis.start(server)
+		  const params = {
+		    limit: 0,
+		    offset: 0,
+		  };
+		  return Moralis.Cloud.run('getBuyEvents', params).then(txs => {
+				this.transactions = txs.result.map(tx => ({
+					transactionHash: tx.transaction_hash,
+					event: "buy",
+					data: tx.data
+				}));
+				this.setHistory(this.transactions);
+				return true;
     	});
 		},
 		async getContractEvents(server, fromDate, toDate, address) {
@@ -252,6 +252,9 @@ export default {
 	},
 	async mounted() {
 		Chart.defaults.plugins.legend.display = false;
+		if ( !this.isConnected ) {
+			this.getContractEvents(vref.moralis['bsc'])
+		}
 	},
 	mixins: [helper]
 }
